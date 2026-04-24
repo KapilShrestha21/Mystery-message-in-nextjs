@@ -100,7 +100,7 @@ const SignInPage = () => {
               type="submit" 
               className="w-full bg-[#A0522D] text-white hover:bg-[#8B4513] font-bold py-7 transition-all duration-300 shadow-[0_6px_20px_rgba(160,82,45,0.3)] rounded-full text-lg"
             >
-              Secure Sign In
+              Sign In
             </Button>
           </form>
         </Form>
