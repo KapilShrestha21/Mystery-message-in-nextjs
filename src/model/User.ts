@@ -23,7 +23,7 @@ export interface User extends Document{
     password: string;
     verifyCode: string;
     verifyCodeExpiry: Date;
-    isVerified: boolean,
+    isVerified: boolean;
     isAcceptingMessages: boolean;
     messages: Message[]
 }
@@ -39,7 +39,7 @@ const UserSchema: Schema<User> = new Schema({
     type: String,
     required: [true, "Email is required"],
     unique: true,
-    match: [/.+\@.+\..+/, 'please use a vaild wmail address']
+    match: [/.+\@.+\..+/, 'please use a vaild email address']
   },
  password: {
     type: String,

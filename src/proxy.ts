@@ -1,9 +1,15 @@
+// It is like a middleware to get the token
+
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 
 export async function proxy(request: NextRequest) {
 
-  const token = await getToken({ req: request })
+  const token = await getToken({
+    req: request,
+    secret: process.env.BETTER_AUTH_SECRET
+  })
+
   const url = request.nextUrl
 
   // If logged in user tries auth pages
@@ -26,7 +32,7 @@ export async function proxy(request: NextRequest) {
 
 }
 
-export const config = {
+export const config = { // to which path this proxy/middleware file should run
   matcher: [
     "/sign-in",
     "/sign-up",
@@ -35,3 +41,4 @@ export const config = {
     "/verify/:path*"
   ]
 }
+

@@ -2,7 +2,6 @@ import dbConnect from "@/lib/dbConnect";
 import UserModel from "@/model/User";
 import { success, z } from "zod";
 import { usernameValidation } from "@/schemas/signUpSchema"
-import { log } from "console";
 
 const UsernameQuerySchema = z.object({
     username: usernameValidation
@@ -15,19 +14,18 @@ export async function GET(request: Request) {
     try {
         const { searchParams } = new URL(request.url) // look at the web address
         const queryParams = {
-            username: searchParams.get('username') // Pull 'kapil' out of ?username=kapil
+            username: searchParams.get('username') // Pull 'username' out of ?username=
         }
 
         // validate with zod
         const result = UsernameQuerySchema.safeParse(queryParams)
-        console.log(result) /// todo: remove
+        console.log(result) // todo: remove
 
         if (!result.success) {
-            const usernameErrors = result.error.format().
-                username?._errors || []
+            const usernameErrors = result.error.format().username?._errors || []
             return Response.json({
                 success: false,
-                message: "Invalid query parameter"
+                message: usernameErrors.length > 0 ? usernameErrors[0] : "Invalid query parameter",
             }, { status: 400 })
         }
 

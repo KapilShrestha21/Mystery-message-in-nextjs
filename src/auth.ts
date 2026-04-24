@@ -1,3 +1,5 @@
+// it is a nextauth code for user login
+
 import NextAuth from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import bcrypt from "bcryptjs"
