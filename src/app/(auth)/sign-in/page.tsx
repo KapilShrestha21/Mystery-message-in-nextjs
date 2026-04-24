@@ -26,25 +26,37 @@ const SignInPage = () => {
   const onSubmit = async (data: z.infer<typeof signInSchema>) => {
     const result = await signIn('credentials', {
       redirect: false,
+      callbackUrl: '/dashboard',
       identifier: data.identifier,
-      password: data.password
+      password: data.password,
     })
-    
-    if (result?.error) {
+
+    if (!result) {
+      toast.error("Login Failed", {
+        description: "Unable to complete sign in. Please try again."
+      })
+      return;
+    }
+
+    if (result.error) {
       toast.error("Login Failed", {
         description: "Incorrect username or password"
       });
-    } 
-
-    if (result?.url) {
-      router.replace('/dashboard')
+      return;
     }
+
+    if (result.ok) {
+      router.replace(result.url ?? '/dashboard');
+      return;
+    }
+
+    toast.error("Login Failed", {
+      description: "Unexpected sign-in response."
+    });
   }
 
   return (
-    // Softer cream background
     <div className="flex justify-center items-center min-h-screen bg-[#FDF6E3] px-4">
-      {/* Warm 'glass' container with amber shadow */}
       <div className="w-full max-w-md p-10 space-y-8 bg-white/60 backdrop-blur-xl border border-[#E3DCC8] rounded-3xl shadow-[0_12px_40px_rgb(210,180,140,0.25)]">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-3 text-[#5C4033]">

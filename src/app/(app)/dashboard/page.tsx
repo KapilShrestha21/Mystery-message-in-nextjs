@@ -25,7 +25,7 @@ const DashboardPage = () => {
     setMessages((prev) => prev.filter((msg) => msg._id.toString() !== messageId));
   }
 
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   const form = useForm({
     resolver: zodResolver(AcceptMessageSchema),
@@ -85,10 +85,21 @@ const DashboardPage = () => {
     }
   }
 
+  // 1. Check if the auth system is still "thinking"
+  if (status === 'loading') {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-[#FDF6E3]">
+        <Loader2 className="animate-spin mr-2 text-[#A0522D]" />
+        <span className="text-[#5C4033] font-medium">Verifying Session...</span>
+      </div>
+    )
+  }
+
+  // 2. If it finished thinking and there is no user, redirect or show message
   if (!session || !session.user) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#FDF6E3] text-[#5C4033]">
-        <Loader2 className="animate-spin mr-2" /> Loading Dashboard...
+      <div className="flex justify-center items-center min-h-screen bg-[#FDF6E3]">
+        <p className="text-[#A0522D]">Please login to access this page.</p>
       </div>
     )
   }
@@ -107,7 +118,7 @@ const DashboardPage = () => {
   return (
     <div className="min-h-screen bg-[#FDF6E3] py-12 px-4">
       <div className="container mx-auto max-w-6xl">
-        
+
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div className="space-y-2">
@@ -117,7 +128,7 @@ const DashboardPage = () => {
             <h1 className="text-4xl font-extrabold tracking-tight text-[#5C4033]">User Dashboard</h1>
             <p className="text-[#8B7355] font-medium">Manage your profile and messages</p>
           </div>
-          
+
           <Button
             variant="outline"
             onClick={(e) => {
@@ -141,7 +152,7 @@ const DashboardPage = () => {
               disabled
               className="w-full h-10 px-5 bg-[#FAF0E6]/80 border border-[#D2B48C] text-[#5C4033] rounded-2xl font-medium focus:outline-none"
             />
-            <Button 
+            <Button
               onClick={copyToClipboard}
               className="w-full md:w-auto bg-[#A0522D] hover:bg-[#8B4513] text-white rounded-full px-5 h-10 flex gap-2 transition-all shadow-md font-bold text-lg"
             >
