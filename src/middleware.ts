@@ -7,6 +7,10 @@ export async function middleware(request: NextRequest) {
     secret: process.env.BETTER_AUTH_SECRET,
   });
 
+  // todo remove after debugging
+  console.log("TOKEN:", token)
+
+
   const url = request.nextUrl;
 
   if (
