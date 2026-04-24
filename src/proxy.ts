@@ -20,7 +20,7 @@ export async function proxy(request: NextRequest) {
       url.pathname.startsWith('/verify')
     )
   ) {
-    return NextResponse.redirect(new URL('/dashboard'))
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   // If guest tries dashboard
