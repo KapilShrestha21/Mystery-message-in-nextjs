@@ -1,9 +1,7 @@
-// It is like a middleware to get the token
-
 import { NextRequest, NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 
-export async function proxy(request: NextRequest) {
+export default async function middleware(request: NextRequest) {
 
   const token = await getToken({
     req: request,
@@ -12,33 +10,30 @@ export async function proxy(request: NextRequest) {
 
   const url = request.nextUrl
 
-  // If logged in user tries auth pages
   if (token &&
     (
       url.pathname.startsWith('/sign-in') ||
       url.pathname.startsWith('/sign-up') ||
-      url.pathname.startsWith('/verify')
+      url.pathname.startsWith('/verify') ||
+      url.pathname === '/' // to redirect home users to dashboard if logged in
     )
   ) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
-  // If guest tries dashboard
   if (!token && url.pathname.startsWith('/dashboard')) {
-    return NextResponse.redirect(new URL('/sign-in',
-      request.url))
+    return NextResponse.redirect(new URL('/sign-in', request.url))
   }
+  
   return NextResponse.next()
-
 }
 
-export const config = { // to which path this proxy/middleware file should run
+export const config = {
   matcher: [
-    "/sign-in",
-    "/sign-up",
-    "/",
-    "/dashboard/:path*",
-    "/verify/:path*"
+    '/sign-in',
+    '/sign-up',
+    '/',
+    '/dashboard/:path*',
+    '/verify/:path*'
   ]
 }
-
