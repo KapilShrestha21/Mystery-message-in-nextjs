@@ -4,11 +4,9 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request: NextRequest) {
   const token = await getToken({
     req: request,
-    secret: process.env.BETTER_AUTH_SECRET,
+    secret: process.env.NEXTAUTH_SECRET,
+    secureCookie: true,
   });
-
-  // todo remove after debugging
-  console.log("TOKEN:", token)
 
 
   const url = request.nextUrl;
