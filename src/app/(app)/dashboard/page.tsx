@@ -9,6 +9,7 @@ import { AcceptMessageSchema } from "@/schemas/acceptMessageSchema"
 import { ApiResponse } from "@/types/ApiResponse"
 import { zodResolver } from "@hookform/resolvers/zod"
 import axios, { AxiosError } from "axios"
+import clsx from "clsx"
 import { Loader2, RefreshCcw, Copy, LayoutDashboard, MessageSquareQuote } from "lucide-react"
 import { User } from "next-auth"
 import { useSession } from "next-auth/react"
@@ -67,10 +68,15 @@ const DashboardPage = () => {
   }, [])
 
   useEffect(() => {
-    if (!session || !session.user) return
-    fetchMessages()
-    fetchAcceptMessage()
-  }, [session, fetchAcceptMessage, fetchMessages])
+    //we are not writing "authenticated" manually anywhere else - It’s a built-in value from NextAuth
+    if (status !== "authenticated") return
+    
+    if (session?.user) {
+      fetchMessages()
+      fetchAcceptMessage()
+    }
+
+  }, [session, fetchAcceptMessage, fetchMessages, status])
 
   const handleSwitchChange = async () => {
     try {

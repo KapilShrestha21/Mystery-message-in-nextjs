@@ -59,11 +59,14 @@ const SignUpPage = () => {
     try {
       const response = await axios.post<ApiResponse>('/api/sign-up', data)
       toast.success(response.data.message)
-      router.replace(`/verify/${username}`)
+
+      const targetUrl = `/verify/${encodeURIComponent(data.username)}`
+      router.replace(targetUrl)
+
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast.error(axiosError.response?.data.message ?? "Signup failed")
-    } finally {
+  
       setIsSubmitting(false)
     }
   }

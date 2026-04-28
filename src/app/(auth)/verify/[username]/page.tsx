@@ -70,7 +70,7 @@ const VerifyAccount = () => {
                                         <Input 
                                             placeholder="Enter code" 
                                             {...field} 
-                                            className="bg-white/80 border-[#D2B48C] text-[#5C4033] placeholder:text-[#A0886F] focus:border-[#CD853F] focus:ring-[#CD853F] rounded-xl h-14 text-center text-xl tracking-[0.5em] font-bold"
+                                            className="bg-white/80 border-[#D2B48C] text-[#5C4033] placeholder:text-[#A0886F] focus:border-[#CD853F] focus:ring-[#CD853F] rounded-xl h-14 text-center text-xl tracking-[0.2em] font-bold"
                                         />
                                     </FormControl>
                                     <FormMessage className="text-red-600" />

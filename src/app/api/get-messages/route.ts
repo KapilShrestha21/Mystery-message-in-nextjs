@@ -30,14 +30,28 @@ export async function GET(request: Request) {
         ])
 
         if (!user || user.length === 0) {
+
+            const userExists = await UserModel.findById(userId)
+
+            // if user is not exist 
+            if (!userExists) {
+                return Response.json(
+                    { success: false, message: "User not found" },
+                    { status: 404 }
+                )
+            }
+
+            // if user exist but have 0 message
             return Response.json(
                 {
-                    success: false,
-                    message: "User not found"
+                    success: true,
+                    messages: []
                 },
-                { status: 401 }
+                { status: 200 }
             )
         }
+
+        // is use have 1 or more messages
         return Response.json(
             {
                 success: true,
